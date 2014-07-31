@@ -1,4 +1,6 @@
 #include "gameboy.h"
+
+#include <boost/thread.hpp>
  
 void gameboy_t::panic()
 {
@@ -18,17 +20,40 @@ gameboy_t::gameboy_t(bool bootrom_enabled, std::string rom_filename)
 	videodec.init(&memory);
 }
 
-#define	IS_PANICKED	(cpu.is_panicked() || memory.is_panicked() || videodec.is_panicked())
 void gameboy_t::run()
 {
-	while( !IS_PANICKED )
-	{
-		cpu.run();
-		videodec.run();
-		if(videodec.requesting_debug())
-			cpu.print();
-	}
-	panic();
+    typedef boost::thread thread;
+
+    struct cpu_runner_t {
+        cpu_runner_t(cpu_t& cpu_, membus_t& memory_)
+        : cpu(cpu_)
+        , memory(memory_)
+        {}
+
+        cpu_t& cpu;
+        membus_t& memory;
+
+        void operator()(){
+            while(!(cpu.is_panicked() || memory.is_panicked())){
+                cpu.run();
+            }
+            throw std::runtime_error("CPU panicked");
+        }
+    };
+
+    cpu_runner_t cpu_runner(cpu, memory);
+    thread cpu_thread(cpu_runner);
+
+    while( !videodec.is_panicked() )
+    {
+        videodec.run();
+        if(videodec.requesting_debug()){
+            cpu.print();
+        }
+    }
+    throw std::runtime_error("Videodec panicked");
+
+    cpu_thread.join();
 }
 
 bool gameboy_t::is_panicked()

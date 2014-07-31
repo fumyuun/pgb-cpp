@@ -1,5 +1,7 @@
 #include "cpu.h"
 
+#include <boost/thread.hpp>
+
 #define DEBUG_OUTPUT 0
 
 #define FLAG_Z  0x80
@@ -49,6 +51,8 @@ void cpu_t::run()
         if(cycles_left > 0) --cycles_left;
 //      inc_counters();
         check_interrupts();
+
+        boost::this_thread::sleep(boost::posix_time::microsec(4));
     }
 }
 

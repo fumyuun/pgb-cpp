@@ -2,10 +2,11 @@
 #define SDL_VIDEODEC_H
 
 #include <sys/time.h>
-#include "SDL/SDL.h"
-#include "membus.h"
 #include <string>
 #include <iostream>
+#include <SDL2/SDL.h>
+
+#include "membus.h"
 
 struct tile_t
 {
@@ -26,16 +27,17 @@ struct sprite_t
 class sdl_videodec_t
 {
 	private:
-		SDL_Surface *screen;
+		SDL_Window *window;
+		SDL_Renderer *renderer;
 		SDL_Event event;
 		uint8_t tiledata[32][32];
 		tile_t tileset[256];
 		sprite_t spriteset[40];
 		Uint32 last_tick;
-		Uint32 PALETTE[5];
-		Uint32 bg_pal[4];
-		Uint32 sp_pal[2][4];
-	
+		Uint8 PALETTE[5];
+		Uint8 bg_pal[4];
+		Uint8 sp_pal[2][4];
+
 		uint8_t *vram;
 		uint8_t *spt;
 		uint8_t *LCDC;

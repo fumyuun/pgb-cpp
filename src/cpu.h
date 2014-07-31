@@ -4,7 +4,9 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+
 #include "membus.h"
+
 typedef uint8_t reg8;
 typedef uint16_t reg16;
 

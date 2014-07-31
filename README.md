@@ -1,4 +1,4 @@
 pgb-cpp
 =======
 
-Gameboy emulator in C++
+Gameboy emulator in C++, using libSDL

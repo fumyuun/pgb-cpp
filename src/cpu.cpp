@@ -1579,8 +1579,35 @@ void cpu_t::id_execute()
         case 0x9E:  sbc(_HL_);break;
         case 0xDE:  data8 = read_mem(); sbc(data8);          break; /* Opcode unconfirmed */
 
+        case 0xA7:  _and(A);   break;
+        case 0xA0:  _and(B);   break;
+        case 0xA1:  _and(C);   break;
+        case 0xA2:  _and(D);   break;
+        case 0xA3:  _and(E);   break;
+        case 0xA4:  _and(H);   break;
+        case 0xA5:  _and(L);   break;
+        case 0xA6:  _and(_HL_);break;
+        case 0xE6:  data8 = read_mem(); _and(data8);          break;
+
+        case 0xB7:  _or(A);   break;
+        case 0xB0:  _or(B);   break;
+        case 0xB1:  _or(C);   break;
+        case 0xB2:  _or(D);   break;
+        case 0xB3:  _or(E);   break;
+        case 0xB4:  _or(H);   break;
+        case 0xB5:  _or(L);   break;
+        case 0xB6:  _or(_HL_);break;
+        case 0xF6:  data8 = read_mem(); _or(data8);          break;
 
         case 0xAF:  _xor(A);   break;
+        case 0xA8:  _xor(B);   break;
+        case 0xA9:  _xor(C);   break;
+        case 0xAA:  _xor(D);   break;
+        case 0xAB:  _xor(E);   break;
+        case 0xAC:  _xor(H);   break;
+        case 0xAD:  _xor(L);   break;
+        case 0xAE:  _xor(_HL_);break;
+        case 0xEE:  data8 = read_mem(); _xor(data8);          break;
 
         case 0xBF:  cp(A);              break;
         case 0xB8:  cp(B);              break;

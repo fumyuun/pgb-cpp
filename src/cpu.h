@@ -102,6 +102,8 @@ class cpu_t
 	reg8 *get_reg(const reg8_e reg);
 	reg16 *get_reg(const reg16_e reg);
 
+	reg8 read_reg(const reg8_e reg);
+
 	reg8_e get_r(const reg8 r);
 	reg16_e get_rp(const reg8 r);
 	reg16_e get_rp2(const reg8 r);
@@ -146,9 +148,18 @@ class cpu_t
 	void _and(const reg8 src);
 	void cp(const reg8 src);
 	void _or(const reg8 src);
-	void sub(reg8 src);
-	void sbc(reg8 src);
-	void _xor(reg8 src);
+	void sub(const reg8 src);
+	void sbc(const reg8 src);
+	void _xor(const reg8 src);
+
+	void add(const reg8_e src);
+	void adc(const reg8_e src);
+	void _and(const reg8_e src);
+	void cp(const reg8_e src);
+	void _or(const reg8_e src);
+	void sub(const reg8_e src);
+	void sbc(const reg8_e src);
+	void _xor(const reg8_e src);
 
 	void dec(const reg8_e dest);
 	void inc(const reg8_e dest);
@@ -213,7 +224,7 @@ class cpu_t
 
 	void panic();
 	void cycle(uint8_t n);
-	
+
 	void set_flags(bool, bool, bool, bool);
 
 	public:

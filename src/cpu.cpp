@@ -56,7 +56,7 @@ void cpu_t::run()
 //      inc_counters();
         check_interrupts();
 
-        nanoseconds nano_sleepy(clock::duration(40) - (clock::now() - start));
+        nanoseconds nano_sleepy(microseconds(40) - (clock::now() - start));
         boost::this_thread::sleep_for(nano_sleepy);
     }
 }

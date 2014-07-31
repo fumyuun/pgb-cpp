@@ -235,7 +235,7 @@ class cpu_t
 	void inject_code(uint8_t *code, size_t length, reg16 new_pc, int steps = 0);
 
 	void print();
-	bool is_panicked();
+	bool is_panicked() const;
 };
 
 #endif

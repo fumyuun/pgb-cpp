@@ -1381,7 +1381,7 @@ void cpu_t::set_flags(bool N, bool Z, bool H, bool C)
     *get_reg(F) = (C ? *get_reg(F) | FLAG_C : *get_reg(F) & ~FLAG_C);
 }
 
-bool cpu_t::is_panicked()
+bool cpu_t::is_panicked() const
 {
     return panicked;
 }

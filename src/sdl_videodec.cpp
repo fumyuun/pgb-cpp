@@ -1,5 +1,5 @@
 #include "sdl_videodec.h"
-#define FPS 25
+#define FPS 60
 #define FRAMESKIP   0
 
 void putpixel(SDL_Renderer *renderer, int x, int y, Uint8 pixel);

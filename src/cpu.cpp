@@ -1,7 +1,7 @@
 #include "cpu.h"
 
 #include <boost/thread.hpp>
-#include <boost/chrono/thread_clock.hpp>
+#include <boost/chrono/system_clocks.hpp>
 
 #define DEBUG_OUTPUT 0
 
@@ -46,7 +46,8 @@ void cpu_t::run()
     if(!panicked)
     {
         using namespace boost::chrono;
-        time_point<thread_clock> const start = thread_clock::now();
+        typedef high_resolution_clock clock;
+        time_point<clock> const start = clock::now();
         if(!halted && cycles_left == 0)
         {
             id_execute();
@@ -55,7 +56,7 @@ void cpu_t::run()
 //      inc_counters();
         check_interrupts();
 
-        nanoseconds nano_sleepy(thread_clock::duration(40) - (thread_clock::now() - start));
+        nanoseconds nano_sleepy(clock::duration(40) - (clock::now() - start));
         boost::this_thread::sleep_for(nano_sleepy);
     }
 }

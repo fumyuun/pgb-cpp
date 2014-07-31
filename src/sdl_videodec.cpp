@@ -185,7 +185,7 @@ void sdl_videodec_t::run()
     {
         switch(event.type)
         {
-            case SDL_QUIT:      panic();        break;
+            case SDL_QUIT:      exit(0);        break;
             case SDL_KEYUP:     debug = true;   break;
         }
     }

@@ -34,7 +34,7 @@ void cpu_t::init(membus_t *membus_, bool bootrom_enabled)
         registers[i].r16 = 0x00;
     *get_reg(PC) = (bootrom_enabled ? 0x0000 : 0x0100);
     IE = membus->get_pointer(0xFFFF);
-    IF = membus->get_pointer(0xFFFE);
+    IF = membus->get_pointer(0xFF0F);
 }
 
 void cpu_t::run()
@@ -605,25 +605,25 @@ void cpu_t::nop()
 
 void cpu_t::halt()
 {
-    std::cout << "Halt\n";
+    std::cout << "Halt" << std::endl;
     halted = true;
 }
 
 void cpu_t::stop()
 {
-    std::cout << "STOP!\n";
+    std::cout << "STOP!" << std::endl;
     panic();
 }
 
 void cpu_t::di()
 {
-    std::cout << "DI\n";
+    std::cout << "DI" << std::endl;
     IME = false;
 }
 
 void cpu_t::ei()
 {
-    std::cout << "EI\n";
+    std::cout << "EI" << std::endl;
     IME = true;
 }
 
@@ -730,7 +730,9 @@ void cpu_t::ldhan_byte(const int8_t n)
 
 void cpu_t::ldhlspn_byte(const int8_t n)
 {
-    *get_reg(A) = membus->read(*get_reg(SP) + n);
+    reg8 src = *get_reg(SP);
+    *get_reg(HL) = membus->read(*get_reg(SP) + n);
+    set_flags(false, false, ((src & 0x800) & (*get_reg(HL) & 0x800)), ((src & 0x8000) & (*get_reg(HL) & 0x8000)));
 }
 
 void cpu_t::ldhna_word(const reg16 n)
@@ -1077,7 +1079,7 @@ void cpu_t::res(const reg8 b, const reg8_e src)
 #define C_NZ    ((*get_reg(F) & FLAG_Z) == 0x00)
 #define C_Z     ((*get_reg(F) & FLAG_Z) == FLAG_Z)
 #define C_NC    ((*get_reg(F) & FLAG_C) == 0x00)
-#define C_CC    (*get_reg(F) & FLAG_C)
+#define C_CC    ((*get_reg(F) & FLAG_C) == FLAG_C)
 
 void cpu_t::jp(const cond_e c, const uint16_t d)
 {

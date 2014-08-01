@@ -4,6 +4,7 @@
 #include <boost/chrono/system_clocks.hpp>
 
 #include <cmath>
+#include <cctype>
 #include <iostream>
 #include <iomanip>
 
@@ -106,6 +107,11 @@ uint8_t membus_t::read(const uint16_t addr)
         assert(result <= 0x99);
         return result;
     }
+
+    if(addr == 0xFF07){
+        std::cout << "TAC read unhandled " << std::endl;
+    }
+
     if(bootrom_enabled && addr < 0x100)
     {
         return bootrom[addr];
@@ -121,20 +127,29 @@ uint8_t membus_t::read(const uint16_t addr)
 
 void membus_t::write(const uint16_t addr, const uint8_t val)
 {
+    if(addr == 0xFF07){
+        std::cout << "TAC write unhandled " << std::hex << (int)val << std::endl;
+    }
+    if(addr == 0xFF24){
+        std::cout << "Sound channel control write unhandled " << std::hex << (int)val << std::endl;
+    }
+    if(addr == 0xFF25){
+        std::cout << "Sound channel selection write unhandled " << std::hex << (int)val << std::endl;
+    }
+    if(addr == 0xFF26){
+        std::cout << "Sound hardware control write unhandled " << std::hex << (int)val << std::endl;
+    }
     if(addr == 0xFF44){
         std::cout << "Written to LY register, unhandled" << std::endl;
     }
-    if(addr == 0xFFFE)
-    {
+    if(addr == 0xFF0F){
         std::cout << "IF: " << std::hex << (unsigned int)val << std::endl;
     }
-    if(addr == 0xFFFF)
-    {
+    if(addr == 0xFFFF){
         std::cout << "IE: " << std::hex << (unsigned int)val << std::endl;
     }
-    if(addr == 0xFF01 && (val & 0x80))
-    {
-        std::cout << (isalpha((char)(rom[0xFF01])) ? (char)(rom[0xFF01]) : '?') << std::flush;
+    if((addr == 0xFF02) && (val & 0x81) && std::isprint(rom[0xFF01])){
+        std::cout << (char)rom[0xFF01] << std::flush;
     }
     /*if(addr >= 0x6000 && addr < 0x8000 && *cart_mode == 0x01)
     {
@@ -149,9 +164,8 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
     //		return;
     //	}
 
-    if(bootrom_enabled && addr == 0xFF50 && val == 0x01)
-    {
-        std::cout << "Disabling boot ROM.\n";
+    if(bootrom_enabled && addr == 0xFF50 && val == 0x01){
+        std::cout << "Disabling boot ROM." << std::endl;
         bootrom_enabled = false;
     }
     //std::cout << "Write [" << std::hex << addr << "]=" << std::hex << (int)val << std::endl;

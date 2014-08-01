@@ -80,7 +80,7 @@ uint8_t membus_t::read(const uint16_t addr)
     // Read the LY register, we calculate what would be in there (goes from 0x00 to 0x99 at 57Hz)
     if(addr == 0xFF44){
         static const bool increment_per_read = false;
-        uint8_t result = 0x100;
+        uint8_t result = 0xA0;
         if(!increment_per_read){
             using namespace boost::chrono;
             typedef high_resolution_clock clock;
@@ -94,7 +94,7 @@ uint8_t membus_t::read(const uint16_t addr)
             result = std::floor(denormalized);
             //std::cout << now_duration.count() << " " << part.count() << " -> " << int(result) << std::endl;
         } else {
-            result = rom[0xFF44] = (rom[0xFF44] + 1) % 0x99;
+            result = rom[0xFF44] = (rom[0xFF44] + 1) % 0xA0;
             //std::cout << int(result) << std::endl;
         }
 

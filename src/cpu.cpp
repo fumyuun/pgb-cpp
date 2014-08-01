@@ -1,5 +1,7 @@
 #include "cpu.h"
 
+#include "common.h"
+
 #include <boost/thread.hpp>
 #include <boost/chrono/system_clocks.hpp>
 
@@ -9,12 +11,6 @@
 #define FLAG_N  0x40
 #define FLAG_H  0x20
 #define FLAG_C  0x10
-
-#define FLAG_I_JOYPAD   0x10
-#define FLAG_I_SERIAL   0x08
-#define FLAG_I_TIMER    0x04
-#define FLAG_I_LCDSTAT  0x02
-#define FLAG_I_VBLANK   0x01
 
 std::string binstring(const unsigned char byte);
 std::string binstring(const unsigned short bytes);
@@ -57,7 +53,7 @@ void cpu_t::run()
         check_interrupts();
 
         nanoseconds nano_sleepy(microseconds(40) - (clock::now() - start));
-        boost::this_thread::sleep_for(nano_sleepy);
+        //boost::this_thread::sleep_for(nano_sleepy);
     }
 }
 
@@ -114,20 +110,11 @@ void cpu_t::check_interrupts()
 
 void cpu_t::inc_counters()
 {
-    reg8 *ly = membus->get_pointer(0xFF44);
-    if(*ly == 0x90)
+    if(membus->read(0xFF44) == 0x90)
     {
         //std::cout << "VBLANK" << std::endl;
         *IF |= FLAG_I_VBLANK;
     }
-    *ly += 1;
-
-    // std::cout << (std::hex) << (unsigned int) *ly << std::endl;
-/*  if(*ly > 0x99)
-    {
-    //  *ly = 0;    // sad hack is sad :(
-        *ly = 0x90;
-    }*/
 }
 
 reg8 *cpu_t::get_reg(reg8_e reg)

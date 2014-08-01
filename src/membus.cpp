@@ -134,7 +134,7 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
     }
     if(addr == 0xFF01 && (val & 0x80))
     {
-        std::cout << (char)(rom[0xFF01]);
+        std::cout << (isalpha((char)(rom[0xFF01])) ? (char)(rom[0xFF01]) : '?') << std::flush;
     }
     /*if(addr >= 0x6000 && addr < 0x8000 && *cart_mode == 0x01)
     {

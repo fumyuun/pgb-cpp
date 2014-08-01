@@ -84,24 +84,28 @@ void cpu_t::check_interrupts()
 
         if(flags & FLAG_I_LCDSTAT)
         {
+            std::cout << "LCDSTAT" << std::endl;
             *IF &= ~FLAG_I_LCDSTAT;
             call(0x48);
         }
 
         if(flags & FLAG_I_TIMER)
         {
+            std::cout << "TIMER" << std::endl;
             *IF &= ~FLAG_I_TIMER;
             call(0x50);
         }
 
         if(flags & FLAG_I_SERIAL)
         {
+            std::cout << "SERIAL" << std::endl;
             *IF &= ~FLAG_I_SERIAL;
             call(0x58);
         }
 
         if(flags & FLAG_I_JOYPAD)
         {
+            std::cout << "JOYPAD" << std::endl;
             *IF &= ~FLAG_I_JOYPAD;
             call(0x60);
         }
@@ -613,11 +617,13 @@ void cpu_t::stop()
 
 void cpu_t::di()
 {
+    std::cout << "DI\n";
     IME = false;
 }
 
 void cpu_t::ei()
 {
+    std::cout << "EI\n";
     IME = true;
 }
 
@@ -1091,6 +1097,7 @@ void cpu_t::jp(const cond_e c, const uint16_t d)
 
 void cpu_t::jp(const uint16_t d)
 {
+//    std::cout << "[" << std::hex << *get_reg(PC) << "]JP " << std::hex << (int)d << std::endl;
     *get_reg(PC) = d;
 }
 
@@ -1117,6 +1124,7 @@ void cpu_t::jr(const cond_e c, const int8_t d)
 
 void cpu_t::jr(const int8_t d)
 {
+//    std::cout << "[" << *get_reg(PC) << "]JR -> " << std::hex << (*get_reg(PC) + d) << std::endl;
     *get_reg(PC) += d;
 }
 
@@ -1164,6 +1172,7 @@ void cpu_t::call(const cond_e c, const reg16 nn)
 
 void cpu_t::rst(const reg8 n)
 {
+    std::cout << "RST " << n << std::endl;
     push(PC);
     jp(0x0000 + n);
 }
@@ -1191,6 +1200,7 @@ void cpu_t::ret(const cond_e c)
 
 void cpu_t::reti()
 {
+    std::cout << "RETI" << std::endl;
     ret();
     IME = true;
 }
@@ -1387,6 +1397,12 @@ void cpu_t::id_execute()
     reg8 instr = read_mem();
     last_instr = instr;
 
+    if(last_adr > 0xFF00)
+    {
+        std::cout << "I'm likely overflowing!" << std::endl;
+        panic();
+    }
+
     if(!booted && last_adr > 0xFF)
     {
         booted = true;
@@ -1526,6 +1542,23 @@ void cpu_t::id_execute()
         case 0xD1:  pop(DE);           break;
         case 0xE1:  pop(HL);           break;
 
+        case 0x09:  addhl(BC);           break;
+        case 0x19:  addhl(DE);           break;
+        case 0x29:  addhl(HL);           break;
+        case 0x39:  addhl(SP);           break;
+
+        case 0xE8:  data8 = read_mem(); addsp(data8); break;
+
+        case 0x03:  inc(BC);           break;
+        case 0x13:  inc(DE);           break;
+        case 0x23:  inc(HL);           break;
+        case 0x33:  inc(SP);           break;
+
+        case 0x0B:  dec(BC);           break;
+        case 0x1B:  dec(DE);           break;
+        case 0x2B:  dec(HL);           break;
+        case 0x3B:  dec(SP);           break;
+
         case 0x87:  add(A);   break;
         case 0x80:  add(B);   break;
         case 0x81:  add(C);   break;
@@ -1623,16 +1656,6 @@ void cpu_t::id_execute()
         case 0x25:  dec(H);            break;
         case 0x2D:  dec(L);            break;
         case 0x35:  dec(_HL_);         break;
-
-        case 0x03:  inc(BC);         break;
-        case 0x13:  inc(DE);         break;
-        case 0x23:  inc(HL);         break;
-        case 0x33:  inc(SP);         break;
-
-        case 0x0B:  dec(BC);         break;
-        case 0x1B:  dec(DE);         break;
-        case 0x2B:  dec(HL);         break;
-        case 0x3B:  dec(SP);         break;
 
         case 0x27:  daa();          break;
         case 0x2F:  cpl();  break;
@@ -1750,7 +1773,7 @@ void cpu_t::id_execute()
                         case 0x86:  res(((instr & 0x38) >> 3), _HL_);break;
 
                         default:
-                        std::cout << "Unknown instruction 0x" << std::hex << (int)last_instr
+                        std::cout << "Unknown CB instruction 0x" << std::hex << (int)last_instr
                             << " at adr 0x" << std::hex << (int)last_adr << std::endl;
                         panic();
                             break;

@@ -43,7 +43,10 @@ bool membus_t::open_rom(std::string filename)
     rom_in.seekg(0, std::ios::end);
     size = rom_in.tellg();
     if(size > 0x8000)
+    {
         size = 0x8000;
+        std::cout << "Warning, rom bigger than 0x8000" << std::endl;
+    }
     rom_in.seekg(0, std::ios::beg);
     if(!rom_in.read((char*)rom, size))
         return false;
@@ -104,13 +107,15 @@ uint8_t membus_t::read(const uint16_t addr)
         return result;
     }
     if(bootrom_enabled && addr < 0x100)
+    {
         return bootrom[addr];
-    if(addr >= 0x4000 && *cart_mode == 0x01)
+    }
+    /*if(addr >= 0x4000 && *cart_mode == 0x01)
     {
         if(rom_bank == 0x00)
             return rom[0x2000 + addr];
         return rom[rom_bank * 0x2000 + addr];
-    }
+    }*/
     return rom[addr];
 }
 
@@ -119,22 +124,23 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
     if(addr == 0xFF44){
         std::cout << "Written to LY register, unhandled" << std::endl;
     }
-    /**	if(addr == 0xFFFE)
+    if(addr == 0xFFFE)
     {
         std::cout << "IF: " << std::hex << (unsigned int)val << std::endl;
     }
     if(addr == 0xFFFF)
     {
         std::cout << "IE: " << std::hex << (unsigned int)val << std::endl;
-    }*/
-    if(addr == 0xFF02 && (val & 0x80))
+    }
+    if(addr == 0xFF01 && (val & 0x80))
     {
         std::cout << (char)(rom[0xFF01]);
     }
-    if(addr >= 0x6000 && addr < 0x8000 && *cart_mode == 0x01)
+    /*if(addr >= 0x6000 && addr < 0x8000 && *cart_mode == 0x01)
     {
         mem_mode = val & 0x01;
-    }
+    }*/
+
     //	if(addr < 0x8000 && *cart_mode == 0x00)
     //	{
     //		std::cout << "ROM write violation at adrr: "
@@ -142,12 +148,13 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
     //		panic();
     //		return;
     //	}
+
     if(bootrom_enabled && addr == 0xFF50 && val == 0x01)
     {
         std::cout << "Disabling boot ROM.\n";
         bootrom_enabled = false;
-        return;
     }
+    //std::cout << "Write [" << std::hex << addr << "]=" << std::hex << (int)val << std::endl;
     rom[addr] = val;
 }
 

@@ -1,6 +1,5 @@
 #include "sdl_videodec.h"
 #define FPS 60
-#define FRAMESKIP   0
 
 void putpixel(SDL_Renderer *renderer, int x, int y, Uint8 pixel);
 
@@ -178,10 +177,10 @@ void sdl_videodec_t::print()
 
 void sdl_videodec_t::run()
 {
-//  static int i = 0;
+    Uint32 start = SDL_GetTicks();
     debug = false;
 
-    if(SDL_PollEvent(&event))
+    while(SDL_PollEvent(&event))
     {
         switch(event.type)
         {
@@ -190,32 +189,26 @@ void sdl_videodec_t::run()
         }
     }
 
-    Uint32 cur_tick = SDL_GetTicks();
-    if(cur_tick - last_tick > (1000/FPS))
+    if(*LCDC & 0x80)
     {
-        last_tick = cur_tick;
-    /*  if(i++ < FRAMESKIP)
+        asleep = false;
+        decode();
+        print();
+    }
+    else
+    {
+        if(!asleep)
         {
-            return;
+            asleep = true;
+            SDL_SetRenderDrawColor(renderer, (PALETTE[4] & 0xFF), (PALETTE[4] & 0xFF), (PALETTE[4] & 0xFF), SDL_ALPHA_OPAQUE);
+            SDL_RenderFillRect(renderer, NULL);
+            SDL_RenderPresent(renderer);
         }
-        i = 0;*/
-
-        if(*LCDC & 0x80)
-        {
-            asleep = false;
-            decode();
-            print();
-        }
-        else
-        {
-            if(!asleep)
-            {
-                asleep = true;
-                SDL_SetRenderDrawColor(renderer, (PALETTE[4] & 0xFF), (PALETTE[4] & 0xFF), (PALETTE[4] & 0xFF), SDL_ALPHA_OPAQUE);
-                SDL_RenderFillRect(renderer, NULL);
-                SDL_RenderPresent(renderer);
-            }
-        }
+    }
+    Uint32 delta = SDL_GetTicks() - start;
+    Uint32 sleep = (1000/FPS) - delta;
+    if(sleep < 1000/FPS){
+        SDL_Delay(sleep);
     }
 }
 

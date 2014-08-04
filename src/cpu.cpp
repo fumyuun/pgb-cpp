@@ -5,7 +5,11 @@
 #include <boost/thread.hpp>
 #include <boost/chrono/system_clocks.hpp>
 
-#define DEBUG_OUTPUT 0
+#define DEBUG_OUTPUT 1
+
+#if DEBUG_OUTPUT > 0
+#include "cpu_debug.h"
+#endif
 
 #define FLAG_Z  0x80
 #define FLAG_N  0x40
@@ -1276,17 +1280,6 @@ void cpu_t::id_execute()
         membus->disable_bootrom();
     }
 
-#if DEBUG_OUTPUT > 0
-    if(!booted)
-        std::cout << "[BOOT]";
-
-    std::cout << "PC: " << std::hex << (int)last_adr << " INSTR: "
-        << (int)last_instr << " ";
-#endif
-#if DEBUG_OUTPUT == 1
-    std::cout << "\n";
-#endif
-
     reg16_2x8 data16; data16.r16 = 0x00;
     reg8 data8 = 0x00;
 
@@ -1692,6 +1685,18 @@ void cpu_t::id_execute()
             panic();
                 break;
     }
+
+
+#if DEBUG_OUTPUT > 0
+    if(!booted)
+        std::cout << "[BOOT]";
+
+    std::cout << "PC: " << std::hex << (int)last_adr << " INSTR: "
+        << (int)last_instr << " ";
+
+    cpu_debug_print(last_adr, last_instr, data8, data16, std::cout);
+#endif
+
 
 #ifdef BREAKPOINT
     if (last_adr == BREAKPOINT)

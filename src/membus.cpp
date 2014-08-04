@@ -148,7 +148,7 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
     if(addr == 0xFFFF){
         std::cout << "IE: " << std::hex << (unsigned int)val << std::endl;
     }
-    if((addr == 0xFF02) && (val & 0x81) && std::isprint(rom[0xFF01])){
+    if((addr == 0xFF02) && (val & 0x80) && std::isprint(rom[0xFF01])){
         std::cout << (char)rom[0xFF01] << std::flush;
     }
     /*if(addr >= 0x6000 && addr < 0x8000 && *cart_mode == 0x01)

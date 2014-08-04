@@ -55,7 +55,9 @@ bool membus_t::open_rom(std::string filename)
 
     char name[0x11];
     strncpy(name, (char*)(rom + 0x134), 0x10);
-    std::cout << "Loaded rom " << name << "(size: " << (int)size << ")\n";
+    std::cout << "Loaded rom " << name << "(size: " << (int)size << ", cart mode: " << (int)*cart_mode << ")" << std::endl;
+
+
 
     return true;
 }
@@ -151,10 +153,17 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
     if((addr == 0xFF02) && (val & 0x80) && std::isprint(rom[0xFF01])){
         std::cout << (char)rom[0xFF01] << std::flush;
     }
-    /*if(addr >= 0x6000 && addr < 0x8000 && *cart_mode == 0x01)
+    if(addr >= 0x6000 && addr < 0x8000 && *cart_mode == 0x01)
     {
-        mem_mode = val & 0x01;
-    }*/
+        std::cout << "Memory mode write " << val << std::endl;
+        //mem_mode = val & 0x01;
+    }
+
+    if(addr >= 0x2000 && addr < 0x8000 && *cart_mode == 0x01)
+    {
+        std::cout << "Memory mode write " << val << std::endl;
+        //mem_mode = val & 0x01;
+    }
 
     //	if(addr < 0x8000 && *cart_mode == 0x00)
     //	{

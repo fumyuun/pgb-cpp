@@ -5,7 +5,7 @@
 #include <boost/thread.hpp>
 #include <boost/chrono/system_clocks.hpp>
 
-#define DEBUG_OUTPUT 1
+#define DEBUG_OUTPUT 0
 
 #if DEBUG_OUTPUT > 0
 #include "cpu_debug.h"

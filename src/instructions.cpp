@@ -58,13 +58,12 @@ void cpu_t::cp(const reg8 src)
 void cpu_t::_or(const reg8 src)
 {
     *get_reg(A) |= src;
-    if(*get_reg(A) == 0x00)
+    if((*get_reg(A) & 0xFF) == 0x00)
         *get_reg(F) |= FLAG_Z;
     else
         *get_reg(F) &= ~FLAG_Z;
     *get_reg(F) &= ~FLAG_N;
     *get_reg(F) &= ~FLAG_H;
-    *get_reg(F) &= ~FLAG_Z;
 }
 
 void cpu_t::sub(const reg8 src)

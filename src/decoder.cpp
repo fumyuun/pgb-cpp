@@ -2,17 +2,16 @@
 
 void cpu_t::id_execute()
 {
-    last_adr = *get_reg(PC);
+    last_instr.adr = *get_reg(PC);
     reg8 instr = read_mem();
-    last_instr = instr;
 
-    if(last_adr > 0xFF00)
+    if(last_instr.adr > 0xFF00)
     {
         std::cout << "I'm likely overflowing!" << std::endl;
         panic();
     }
 
-    if(!booted && last_adr > 0xFF)
+    if(!booted && last_instr.adr > 0xFF)
     {
         booted = true;
         membus->disable_bootrom();
@@ -371,8 +370,8 @@ void cpu_t::id_execute()
                         case 0x86:  res(((instr & 0x38) >> 3), _HL_);break;
 
                         default:
-                        std::cout << "Unknown CB instruction 0x" << std::hex << (int)last_instr
-                            << " at adr 0x" << std::hex << (int)last_adr << std::endl;
+                        std::cout << "Unknown CB instruction 0x" << std::hex << (int)last_instr.instr
+                            << " at adr 0x" << std::hex << (int)last_instr.adr << std::endl;
                         panic();
                             break;
                     }
@@ -418,26 +417,32 @@ void cpu_t::id_execute()
         case 0xD9:  reti(); break;
 
         default:
-            std::cout << "Unknown instruction 0x" << std::hex << (int)last_instr
-                << " at adr 0x" << std::hex << (int)last_adr << std::endl;
+            std::cout << "Unknown instruction 0x" << std::hex << (int)last_instr.instr
+                << " at adr 0x" << std::hex << (int)last_instr.adr << std::endl;
             panic();
                 break;
     }
 
 
-#if DEBUG_OUTPUT > 0
+    last_instr.instr = instr;
+    last_instr.data8 = data8;
+    last_instr.data16 = data16;
+
+
+#if DEBUG_OUTPUT > 1
     if(!booted)
         std::cout << "[BOOT]";
 
-    std::cout << "PC: " << std::hex << (int)last_adr << " INSTR: "
-        << (int)last_instr << " ";
+    std::cout << "PC: " << std::hex << (int)last_instr.adr << " INSTR: "
+        << (int)last_instr.instr << " ";
 
-    cpu_debug_print(last_adr, last_instr, data8, data16, std::cout);
+    cpu_debug_print(last_instr.adr, last_instr.instr, last_instr.data8, last_instr.data16, std::cout);
+    std::cout << std::endl;
 #endif
 
 
 #ifdef BREAKPOINT
-    if (last_adr == BREAKPOINT)
+    if (last_instr.adr == BREAKPOINT)
     {
         std::cout << "Breakpoint reached" << std::endl;
         panic();

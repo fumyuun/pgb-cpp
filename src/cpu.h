@@ -1,6 +1,8 @@
 #ifndef CPU_H
 #define CPU_H
 
+#define DEBUG_OUTPUT 1
+
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -27,6 +29,13 @@ union reg16_2x8
 	} r8;
 	reg16 r16;
 };
+
+typedef struct {
+	reg16 adr;
+	reg8 instr;
+	reg8 data8;
+	reg16_2x8 data16;
+} linstr_state_e;
 
 typedef enum
 {
@@ -93,8 +102,7 @@ typedef enum
 class cpu_t
 {
 	private:
-	reg8 last_instr;
-	reg16 last_adr;
+	linstr_state_e last_instr;
 	bool booted;
 	bool panicked;
 	bool halted;
@@ -242,5 +250,9 @@ class cpu_t
 	void print();
 	bool is_panicked() const;
 };
+
+#if DEBUG_OUTPUT > 0
+#include "cpu_debug.h"
+#endif
 
 #endif

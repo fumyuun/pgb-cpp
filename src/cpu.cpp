@@ -5,12 +5,6 @@
 #include <boost/thread.hpp>
 #include <boost/chrono/system_clocks.hpp>
 
-#define DEBUG_OUTPUT 0
-
-#if DEBUG_OUTPUT > 0
-#include "cpu_debug.h"
-#endif
-
 std::string binstring(const unsigned char byte);
 std::string binstring(const unsigned short bytes);
 std::string reg8_e_tostring(const reg8_e r);
@@ -21,8 +15,10 @@ std::string rot_e_tostring(const rot_e rot);
 
 void cpu_t::init(membus_t *membus_, bool bootrom_enabled)
 {
-    last_instr = 0x00;
-    last_adr = 0x00;
+    last_instr.instr = 0x00;
+    last_instr.data8 = 0x00;
+    last_instr.data16.r16 = 0x00;
+    last_instr.adr = 0x00;
     panicked = false;
     booted = false;
     halted = false;
@@ -58,7 +54,7 @@ void cpu_t::run()
 
 int8_t cpu_t::read_mem()
 {
-    //last_adr = *get_reg(PC);
+    //last_instr.adr = *get_reg(PC);
     int8_t c = membus->read((*get_reg(PC))++);
     return c;
 }
@@ -267,7 +263,7 @@ void cpu_t::inject_code(uint8_t *code, size_t length, reg16 new_pc, int steps)
     if(steps == 0 && !panicked)
     {
         do{run();}
-        while(last_instr != 0x00 && !panicked);
+        while(last_instr.instr != 0x00 && !panicked);
     }
 
     memcpy(membus->get_pointer(old_pc), old_code, length);
@@ -281,8 +277,13 @@ void cpu_t::inject_code(uint8_t *code, size_t length, reg16 new_pc, int steps)
 void cpu_t::panic()
 {
     std::cout << "========\nCPU panicked!\n";
-    std::cout << "Last instruction 0x" << std::hex << (int)last_instr
-        << " at adr 0x" << std::hex << (int)last_adr << "\n";
+    std::cout << "Last instruction 0x" << std::hex << (int)last_instr.instr;
+    #if DEBUG_OUTPUT > 0
+    std::cout << "(";
+    cpu_debug_print(last_instr.adr, last_instr.instr, last_instr.data8, last_instr.data16, std::cout);
+    std::cout << ")";
+    #endif
+    std::cout << " at adr 0x" << std::hex << (int)last_instr.adr << "\n";
     std::cout << "========\n";
     print();
     panicked = true;

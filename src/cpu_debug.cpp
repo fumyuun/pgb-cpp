@@ -178,17 +178,17 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
                 switch(y)
             {
                 case 0x00:
-                    out << "NOP" << std::endl;
+                    out << "NOP";
                     return;
                 case 0x01:
                     out << "LD ("
-                    << "0x" << std::hex << (int)data16.r16 << "), SP" << std::endl;
+                    << "0x" << std::hex << (int)data16.r16 << "), SP";
                     return;
                 case 0x02:
-                    out << "STOP" << std::endl;
+                    out << "STOP";
                     return;
                 case 0x03:
-                    out << "JR " << "0x" << std::hex << (int)data8 << std::endl;
+                    out << "JR " << "0x" << std::hex << (int)data8;
                     return;
                 case 0x04:
                 case 0x05:
@@ -196,7 +196,7 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
                 case 0x07:
                     cc = get_cc(y - 4);
                     out << "JR " << cond_e_tostring(cc)
-                    << ", " << "0x" << std::hex << (int)data8 << std::endl;
+                    << ", " << "0x" << std::hex << (int)data8;
                     return;
                 default:    break;
             }
@@ -208,11 +208,11 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
                 case 0x00:
                     rp = get_rp(p);
                     out << "LD " << reg16_e_tostring(rp)
-                    << ", " << "0x" << std::hex << (int)data16.r16 << std::endl;
+                    << ", " << "0x" << std::hex << (int)data16.r16;
                     return;
                 case 0x01:
                     rp = get_rp(p);
-                    out << "ADD HL, " << reg16_e_tostring(rp) << std::endl;
+                    out << "ADD HL, " << reg16_e_tostring(rp);
                     return;
                 default:    break;
             }
@@ -222,28 +222,28 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
                 switch((q << 2) | p)
             {
                 case 0x00:                      // LD (BC),A
-                    out << "LD (BC), A" << std::endl;
+                    out << "LD (BC), A";
                     return;
                 case 0x01:                      // LD (DE),A
-                    out << "LD (DE), A" << std::endl;
+                    out << "LD (DE), A";
                     return;
                 case 0x02:                      // LDI (HL),A
-                    out << "LDI (HL), A" << std::endl;
+                    out << "LDI (HL), A";
                     return;
                 case 0x03:                      // LDD (HL),A
-                    out << "LDD (HL), A" << std::endl;
+                    out << "LDD (HL), A";
                     return;
                 case 0x04:                      // LD A,(BC)
-                    out << "LD A, (BC)" << std::endl;
+                    out << "LD A, (BC)";
                     return;
                 case 0x05:                      // LD A,(DE)
-                    out << "LD A, (DE)" << std::endl;
+                    out << "LD A, (DE)";
                     return;
                 case 0x06:                      // LDI A,(HL)
-                    out << "LDI A, (HL)" << std::endl;
+                    out << "LDI A, (HL)";
                     return;
                 case 0x07:                      // LDD A,(HL)
-                    out << "LDD A, (HL)" << std::endl;
+                    out << "LDD A, (HL)";
                     return;
                 default:
                     break;
@@ -264,46 +264,46 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
 
             case 0x04:
                 r = get_r(y);
-                out << "INC " << reg8_e_tostring(r) << std::endl;
+                out << "INC " << reg8_e_tostring(r);
                 return;
 
             case 0x05:
                 r = get_r(y);
-                out << "DEC " << reg8_e_tostring(r) << std::endl;
+                out << "DEC " << reg8_e_tostring(r);
                 return;
 
             case 0x06:
                 r = get_r(y);
                 out << "LD " << reg8_e_tostring(r)
-                << ", 0x" << std::hex << (int)data8 << std::endl;
+                << ", 0x" << std::hex << (int)data8;
                 return;
 
             case 0x07:
                 switch(y)
             {
                 case 0x00:
-                    out << "RLCA" << std::endl;
+                    out << "RLCA";
                     return;
                 case 0x01:
-                    out << "RRCA" << std::endl;
+                    out << "RRCA";
                     return;
                 case 0x02:
-                    out << "RLA" << std::endl;
+                    out << "RLA";
                     return;
                 case 0x03:
-                    out << "RRA" << std::endl;
+                    out << "RRA";
                     return;
                 case 0x04:
-                    out << "DAA" << std::endl;
+                    out << "DAA";
                     return;
                 case 0x05:
-                    out << "CPL" << std::endl;
+                    out << "CPL";
                     return;
                 case 0x06:
-                    out << "SCF" << std::endl;
+                    out << "SCF";
                     return;
                 case 0x07:
-                    out << "CCF" << std::endl;
+                    out << "CCF";
                     return;
                 default:   break;
             }
@@ -319,14 +319,14 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
             r = get_r(y);
             r2 = get_r(z);
             out << "LD " << reg8_e_tostring(r) << ", "
-            << reg8_e_tostring(r2) << std::endl;
+            << reg8_e_tostring(r2);
             return;
 
         case 0x02:
             alu = get_alu(y);
             r = get_r(z);
             out << alu_e_tostring(alu) << " A, "
-            << reg8_e_tostring(r) << std::endl;
+            << reg8_e_tostring(r);
             return;
 
         case 0x03:
@@ -336,46 +336,46 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
                 cc = get_cc(y);
                 if(cc == PO)
                 {
-                    out << "LDH (" << "0x" << std::hex << (int)data8 << "), A" << std::endl;
+                    out << "LDH (" << "0x" << std::hex << (int)data8 << "), A";
                     return;
                 }
                 if(cc == PE)
                 {
-                    out << "ADD SP, " << "0x" << std::hex << (int)data8 << std::endl;
+                    out << "ADD SP, " << "0x" << std::hex << (int)data8;
                     return;
                 }
                 if(cc == P)
                 {
-                    out << "LDH A, (" << "0x" << std::hex << (int)data8 << ")" << std::endl;
+                    out << "LDH A, (" << "0x" << std::hex << (int)data8 << ")";
                     return;
                 }
                 if(cc == M)
                 {
-                    out << "LDHL SP, " << "0x" << std::hex << (int)data8 << std::endl;
+                    out << "LDHL SP, " << "0x" << std::hex << (int)data8;
                     return;
                 }
-                out << "RET " << cond_e_tostring(cc) << std::endl;
+                out << "RET " << cond_e_tostring(cc);
                 return;
             case 0x01:
                 if(q == 0x00)
                 {
                     rp = get_rp2(p);
-                    out << "POP " << reg16_e_tostring(rp) << std::endl;
+                    out << "POP " << reg16_e_tostring(rp);
                     return;
                 }
                 switch(p)
             {
                 case 0x00:
-                    out << "RET" << std::endl;
+                    out << "RET";
                     return;
                 case 0x01:
-                    out << "RETI" << std::endl;
+                    out << "RETI";
                     return;
                 case 0x02:
-                    out << "JP HL" << std::endl;
+                    out << "JP HL";
                     return;
                 case 0x03:
-                    out << "LD SP, HL" << std::endl;
+                    out << "LD SP, HL";
                     return;
             }
                 break;
@@ -384,19 +384,19 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
                 cc = get_cc(y);
                 if(cc == PO)
                 {
-                    out << "LD (C), A" << std::endl;
+                    out << "LD (C), A";
                     return;
                 }
                 if(cc == PE)
                 {
                     out << "LD ("
-                    << "0x" << std::hex << (int)data16.r16 << "), A" << std::endl;
+                    << "0x" << std::hex << (int)data16.r16 << "), A";
                     return;
                 }
                 if(cc == M)
                 {
                     out << "LD A, ("
-                    << "0x" << std::hex << (int)data16.r16 << ")" << std::endl;
+                    << "0x" << std::hex << (int)data16.r16 << ")";
                     return;
                 }
                 if(cc == P)
@@ -404,13 +404,13 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
                     break;
                 }
                 out << "JP " << cond_e_tostring(cc) << ", "
-                << "0x" << std::hex << (int)data16.r16 << std::endl;
+                << "0x" << std::hex << (int)data16.r16;
                 return;
             case 0x03:
                 switch(y)
             {
                 case 0x00:
-                    out << "JP " << "0x" << std::hex << (int)data16.r16 << std::endl;
+                    out << "JP " << "0x" << std::hex << (int)data16.r16;
                     return;
 
                 case 0x01:
@@ -421,10 +421,10 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
                 case 0x05:                      // z80-EX,  removed
                         break;
                 case 0x06:
-                    out << "DI" << std::endl;
+                    out << "DI";
                     return;
                 case 0x07:
-                    out << "EI" << std::endl;
+                    out << "EI";
                     return;
                 default:    break;
             }
@@ -433,20 +433,20 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
             case 0x04:
                 cc = get_cc(y);
                 out << "CALL " << cond_e_tostring(cc) << ", "
-                << "0x" << std::hex << (int)data16.r16 << std::endl;
+                << "0x" << std::hex << (int)data16.r16;
                 return;
 
             case 0x05:
                 if(q == 0x00)
                 {
                     rp = get_rp2(p);
-                    out << "PUSH " << reg16_e_tostring(rp) << std::endl;
+                    out << "PUSH " << reg16_e_tostring(rp);
                     return;
                 }
                 switch(p)
             {
                 case 0x00:
-                    out << "CALL " << "0x" << std::hex << (int)data16.r16 << std::endl;
+                    out << "CALL " << "0x" << std::hex << (int)data16.r16;
                     return;
                 case 0x01:                      // z80-DD-prefix, removed
                 case 0x02:                      // z80-ED-prefix, removed
@@ -457,11 +457,11 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
             case 0x06:
                 alu = get_alu(y);
                 out << alu_e_tostring(alu) << " A, "
-                << "0x" << std::hex << (int)data8 << std::endl;
+                << "0x" << std::hex << (int)data8;
                 return;
 
             case 0x07:
-                out << "RST" << "0x" << std::hex << (int)(8*y) << std::endl;
+                out << "RST" << "0x" << std::hex << (int)(8*y);
                 return;
 
             default:    break;
@@ -469,7 +469,7 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
             break;
     }
 
-    std::cout << "Unknown instruction 0x" << "0x" << std::hex << (int)instr << std::endl;
+    std::cout << "Unknown instruction 0x" << "0x" << std::hex << (int)instr;
     return;
 }
 
@@ -486,19 +486,19 @@ void id_execute_cb(reg8 pc, reg8 instr, std::ostream &out)
         case 0x00:
             rot = get_rot(y);
             out << rot_e_tostring(rot) << " "
-            << reg8_e_tostring(r) << "\n";
+            << reg8_e_tostring(r);
             return;
         case 0x01:
             out << "BIT " << "0x" << std::hex << (int)y
-            << reg8_e_tostring(r) << "\n";
+            << reg8_e_tostring(r);
             return;
         case 0x02:
             out << "RES " << "0x" << std::hex << (int)y
-            << reg8_e_tostring(r) << "\n";
+            << reg8_e_tostring(r);
             return;
         case 0x03:
             out << "SET " << "0x" << std::hex << (int)y
-            << reg8_e_tostring(r) << "\n";
+            << reg8_e_tostring(r);
             return;
         default:    break;
     }

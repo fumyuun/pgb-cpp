@@ -129,6 +129,9 @@ uint8_t membus_t::read(const uint16_t addr)
 
 void membus_t::write(const uint16_t addr, const uint8_t val)
 {
+    if(addr == 0xFF06){
+        std::cout << "TMA write unhandled " << std::hex << (int)val << std::endl;
+    }
     if(addr == 0xFF07){
         std::cout << "TAC write unhandled " << std::hex << (int)val << std::endl;
     }
@@ -141,8 +144,19 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
     if(addr == 0xFF26){
         std::cout << "Sound hardware control write unhandled " << std::hex << (int)val << std::endl;
     }
+    if(addr == 0xFF40){
+        std::cout << "LCDC write " << std::hex << (unsigned int)val << std::endl;
+    }
     if(addr == 0xFF44){
         std::cout << "Written to LY register, unhandled" << std::endl;
+    }
+
+    if(addr == 0xFF4A){
+        std::cout << "Written to WY register, unhandled" << std::endl;
+    }
+
+    if(addr == 0xFF4B){
+        std::cout << "Written to XY register, unhandled" << std::endl;
     }
     if(addr == 0xFF0F){
         std::cout << "IF: " << std::hex << (unsigned int)val << std::endl;

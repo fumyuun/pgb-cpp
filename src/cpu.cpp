@@ -63,7 +63,7 @@ void cpu_t::check_interrupts()
 {
     if(!IME)
         return;
-//  std::cout << "IME: " << IME << " IE: " << std::hex << (unsigned int)*IE << " IF: " << std::hex << (unsigned int)*IF << std::endl;
+    //std::cout << "IME: " << IME << " IE: " << std::hex << (unsigned int)*IE << " IF: " << std::hex << (unsigned int)*IF << std::endl;
 
     reg8 flags = *IE & *IF;
     if(flags)
@@ -240,6 +240,10 @@ void cpu_t::print()
         std::cout << std::hex << std::setw(6) << (int)membus->read(*get_reg(r));
         std::cout << std::dec << ", " << binstring(*get_reg(r)) << "\n";
     }
+
+    std::cout << "[INT] JSTLV " << (IME ? "Enabled" : "Disabled") << "\n"; 
+    std::cout << "IE " << binstring(*IE) << "\n";
+    std::cout << "IF " << binstring(*IF) << "\n";
     std::cout << "[Flags]\nZNHC\n" << binstring(*get_reg(F)) << "\n";
 }
 

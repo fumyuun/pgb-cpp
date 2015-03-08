@@ -372,7 +372,7 @@ void cpu_t::id_execute()
                         default:
                         std::cout << "Unknown CB instruction 0x" << std::hex << (int)last_instr.instr
                             << " at adr 0x" << std::hex << (int)last_instr.adr << std::endl;
-                        panic();
+                        //panic();
                             break;
                     }
                     break;
@@ -419,7 +419,7 @@ void cpu_t::id_execute()
         default:
             std::cout << "Unknown instruction 0x" << std::hex << (int)last_instr.instr
                 << " at adr 0x" << std::hex << (int)last_instr.adr << std::endl;
-            panic();
+            //panic();
                 break;
     }
 
@@ -433,8 +433,7 @@ void cpu_t::id_execute()
     if(!booted)
         std::cout << "[BOOT]";
 
-    std::cout << "PC: " << std::hex << (int)last_instr.adr << " INSTR: "
-        << (int)last_instr.instr << " ";
+    std::cout << "(0x" << std::hex << (int)last_instr.adr << ") ";
 
     cpu_debug_print(last_instr.adr, last_instr.instr, last_instr.data8, last_instr.data16, std::cout);
     std::cout << std::endl;

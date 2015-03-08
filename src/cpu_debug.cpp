@@ -254,11 +254,11 @@ void cpu_debug_print(reg8 pc, reg8 instr, reg8 data8, reg16_2x8 data16, std::ost
                 rp = get_rp(p);
                 if(q == 0x00)
                 {
-                    out << "INC " << reg16_e_tostring(rp)<< std::endl;
+                    out << "INC " << reg16_e_tostring(rp);
                 }
                 else
                 {
-                    out << "DEC " << reg16_e_tostring(rp)<< std::endl;
+                    out << "DEC " << reg16_e_tostring(rp);
                 }
                 return;
 

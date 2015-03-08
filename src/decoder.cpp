@@ -370,8 +370,10 @@ void cpu_t::id_execute()
                         case 0x86:  res(((instr & 0x38) >> 3), _HL_);break;
 
                         default:
-                        std::cout << "Unknown CB instruction 0x" << std::hex << (int)last_instr.instr
-                            << " at adr 0x" << std::hex << (int)last_instr.adr << std::endl;
+                        std::cout << "Unknown CB instruction 0x" << std::hex << (unsigned int)last_instr.instr
+                            << " at adr 0x" << std::hex << ((unsigned int)last_instr.adr) << " (0x"
+                            << ((unsigned int) (instr & 0x47)) << ", 0x"
+                            << ((unsigned int) ((instr & 0x38) >> 3)) << ")" << std::endl;
                         //panic();
                             break;
                     }

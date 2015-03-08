@@ -192,6 +192,9 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
     if(addr == 0xFF44){
         std::cout << "Written to LY register, unhandled" << std::endl;
     }
+    if(addr == 0xFF46){
+        std::cout << "Written to DMA register, unhandled" << std::endl;
+    }
     if(addr == 0xFF4A){
         std::cout << "Written to WY register, unhandled" << std::endl;
     }
@@ -199,10 +202,10 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
         std::cout << "Written to XY register, unhandled" << std::endl;
     }
     if(addr == 0xFF0F){
-        std::cout << "IF: " << std::hex << (unsigned int)val << std::endl;
+        std::cout << "IF write: " << std::hex << (unsigned int)val << std::endl;
     }
     if(addr == 0xFFFF){
-        std::cout << "IE: " << std::hex << (unsigned int)val << std::endl;
+        std::cout << "IE write: " << std::hex << (unsigned int)val << std::endl;
     }
     if((addr == 0xFF02) && (val & 0x80) && std::isprint(rom[0xFF01])){
         std::cout << (char)rom[0xFF01] << std::flush;

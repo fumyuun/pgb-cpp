@@ -917,7 +917,6 @@ void cpu_t::call(const cond_e c, const reg16 nn)
 
 void cpu_t::rst(const reg8 n)
 {
-    std::cout << "RST " << n << std::endl;
     push(PC);
     jp(0x0000 + n);
 }

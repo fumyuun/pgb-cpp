@@ -80,6 +80,45 @@ T denormalize(T const min, T const max, T const value){
 
 uint8_t membus_t::read(const uint16_t addr)
 {
+    if(addr == 0xFF00){
+        std::cout << "P1 (Joypad) read unhandled" << std::endl;
+    }
+    if(addr == 0xFF01){
+        std::cout << "SB (Serial Bus) read unhandled" << std::endl;
+    }
+    if(addr == 0xFF02){
+        std::cout << "SC (Serial Control) read unhandled" << std::endl;
+    }
+    if(addr == 0xFF04){
+        std::cout << "DIV read unhandled" << std::endl;
+    }
+    if(addr == 0xFF05){
+        std::cout << "TIMA read unhandled" << std::endl;
+    }
+    if(addr == 0xFF06){
+        std::cout << "TMA read unhandled " << std::endl;
+    }
+    if(addr == 0xFF07){
+        std::cout << "TAC read unhandled " << std::endl;
+    }
+    if(addr == 0xFF24){
+        std::cout << "Sound channel control read unhandled " << std::endl;
+    }
+    if(addr == 0xFF25){
+        std::cout << "Sound channel selection read unhandled " << std::endl;
+    }
+    if(addr == 0xFF26){
+        std::cout << "Sound hardware control read unhandled " << std::endl;
+    }
+    if(addr == 0xFF41){
+        std::cout << "STAT read unhandled" << std::endl;
+    }
+    if(addr == 0xFF4A){
+        std::cout << "Read from WY register, unhandled" << std::endl;
+    }
+    if(addr == 0xFF4B){
+        std::cout << "Read from XY register, unhandled" << std::endl;
+    }
     // Read the LY register, we calculate what would be in there (goes from 0x00 to 0x99 at 57Hz)
     if(addr == 0xFF44){
         static const bool increment_per_read = false;
@@ -147,14 +186,15 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
     if(addr == 0xFF40){
         std::cout << "LCDC write " << std::hex << (unsigned int)val << std::endl;
     }
+    if(addr == 0xFF41){
+        std::cout << "STAT write " << std::hex << (unsigned int)val << std::endl;
+    }
     if(addr == 0xFF44){
         std::cout << "Written to LY register, unhandled" << std::endl;
     }
-
     if(addr == 0xFF4A){
         std::cout << "Written to WY register, unhandled" << std::endl;
     }
-
     if(addr == 0xFF4B){
         std::cout << "Written to XY register, unhandled" << std::endl;
     }

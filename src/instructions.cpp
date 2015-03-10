@@ -693,6 +693,23 @@ void cpu_t::sra(const reg8_e dest)
     *get_reg(F) &= ~FLAG_H;
 }
 
+void cpu_t::sll(const reg8_e dest)
+{
+    if(*get_reg(dest) & 0x01)
+        *get_reg(F) |= FLAG_C;
+    else
+        *get_reg(F) &= ~FLAG_C;
+
+    *get_reg(dest) = *get_reg(dest) << 1;
+
+    if(*get_reg(dest) == 0x00)
+        *get_reg(F) |= FLAG_Z;
+    else
+        *get_reg(F) &= ~FLAG_Z;
+    *get_reg(F) &= ~FLAG_N;
+    *get_reg(F) &= ~FLAG_H;
+}
+
 void cpu_t::srl(const reg8_e dest)
 {
     if(*get_reg(dest) & 0x01)

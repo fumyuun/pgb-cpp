@@ -327,6 +327,15 @@ void cpu_t::id_execute()
                 case 0x2D:  sra(L); break;
                 case 0x2E:  sra(_HL_); break;
 
+                case 0x37:  sll(A); break;
+                case 0x30:  sll(B); break;
+                case 0x31:  sll(C); break;
+                case 0x32:  sll(D); break;
+                case 0x33:  sll(E); break;
+                case 0x34:  sll(H); break;
+                case 0x35:  sll(L); break;
+                case 0x36:  sll(_HL_); break;
+
                 case 0x3F:  srl(A); break;
                 case 0x38:  srl(B); break;
                 case 0x39:  srl(C); break;
@@ -338,8 +347,8 @@ void cpu_t::id_execute()
 
                 default:
                     /* check for BIT op */
-                    /* -x-- -xxx are relevant for the operation */
-                    switch(instr & 0x47)
+                    /* xx-- -xxx are relevant for the operation */
+                    switch(instr & 0xC7)
                     {
                         /* --xx x--- are relevant as argument */
                         case 0x47:  bit(((instr & 0x38) >> 3), A);   break;
@@ -370,9 +379,9 @@ void cpu_t::id_execute()
                         case 0x86:  res(((instr & 0x38) >> 3), _HL_);break;
 
                         default:
-                        std::cout << "Unknown CB instruction 0x" << std::hex << (unsigned int)last_instr.instr
+                        std::cout << "Unknown CB instruction 0x" << std::hex << (unsigned int)instr
                             << " at adr 0x" << std::hex << ((unsigned int)last_instr.adr) << " (0x"
-                            << ((unsigned int) (instr & 0x47)) << ", 0x"
+                            << ((unsigned int) (instr & 0xC7)) << ", 0x"
                             << ((unsigned int) ((instr & 0x38) >> 3)) << ")" << std::endl;
                         //panic();
                             break;

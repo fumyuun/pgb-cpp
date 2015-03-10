@@ -208,6 +208,7 @@ class cpu_t
 	void rr(const reg8_e dest);
 	void sla(const reg8_e dest);
 	void sra(const reg8_e dest);
+	void sll(const reg8_e dest);
 	void srl(const reg8_e dest);
 
 	void addhl(const reg16_e src);

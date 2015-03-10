@@ -383,7 +383,7 @@ void cpu_t::id_execute()
                             << " at adr 0x" << std::hex << ((unsigned int)last_instr.adr) << " (0x"
                             << ((unsigned int) (instr & 0xC7)) << ", 0x"
                             << ((unsigned int) ((instr & 0x38) >> 3)) << ")" << std::endl;
-                        //panic();
+                        panic();
                             break;
                     }
                     break;
@@ -430,7 +430,7 @@ void cpu_t::id_execute()
         default:
             std::cout << "Unknown instruction 0x" << std::hex << (int)last_instr.instr
                 << " at adr 0x" << std::hex << (int)last_instr.adr << std::endl;
-            //panic();
+            panic();
                 break;
     }
 

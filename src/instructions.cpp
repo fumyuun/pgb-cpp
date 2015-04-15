@@ -91,6 +91,9 @@ void cpu_t::sub(const reg8 src)
 void cpu_t::sbc(const reg8 src)
 {
     reg8 result = *get_reg(A) - src;
+    if (*get_reg(F) & FLAG_C)
+        result -= 1;
+
     if(result == 0x00)
         *get_reg(F) |= FLAG_Z;
     else

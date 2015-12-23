@@ -44,7 +44,7 @@ void cpu_t::run()
             id_execute();
         }
         if(cycles_left > 0) --cycles_left;
-//      inc_counters();
+        inc_counters();
         check_interrupts();
 
         nanoseconds nano_sleepy(microseconds(40) - (clock::now() - start));

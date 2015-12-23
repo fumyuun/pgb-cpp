@@ -14,6 +14,8 @@ membus_t::membus_t()
     memset(rom, 0x00, 0xFFFF);	// Zero memory, not completely correct...
     memset(ram, 0x00, 0xFFFF);
     cart_mode = rom + 0x0147;
+    rom_size = rom + 0x0148;
+    ram_size = rom + 0x0149;
     mem_mode = 0x00;
     rom_bank = 0x00;
     rom[0xFF44] = 0x90;			// Lets just hack in vsynch
@@ -55,7 +57,8 @@ bool membus_t::open_rom(std::string filename)
 
     char name[0x11];
     strncpy(name, (char*)(rom + 0x134), 0x10);
-    std::cout << "Loaded rom " << name << "(size: " << (int)size << ", cart mode: " << (int)*cart_mode << ")" << std::endl;
+    std::cout << "Loaded rom " << name << "(size: " << (int)size << ", cart mode: " << (int)*cart_mode;
+    std::cout << ", rom size: " << (int)*rom_size << ", ram size: " << (int)*ram_size << ")" << std::endl;
 
 
 
@@ -221,14 +224,6 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
         std::cout << "Memory mode write " << val << std::endl;
         //mem_mode = val & 0x01;
     }
-
-    //	if(addr < 0x8000 && *cart_mode == 0x00)
-    //	{
-    //		std::cout << "ROM write violation at adrr: "
-    //			<< std::hex << (int)addr << "\n";
-    //		panic();
-    //		return;
-    //	}
 
     if(bootrom_enabled && addr == 0xFF50 && val == 0x01){
         std::cout << "Disabling boot ROM." << std::endl;

@@ -14,6 +14,8 @@ class membus_t
 		uint8_t ram[0xFFFF];
 		uint8_t bootrom[0xFF];
 		uint8_t *cart_mode;
+		uint8_t *rom_size;
+		uint8_t *ram_size;
 		uint8_t mem_mode;
 		uint8_t rom_bank;
 		bool bootrom_enabled;

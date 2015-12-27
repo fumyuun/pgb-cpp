@@ -27,6 +27,7 @@ struct sprite_t
 class sdl_videodec_t
 {
 	private:
+		membus_t *membus;
 		SDL_Window *window;
 		SDL_Renderer *renderer;
 		SDL_Event event;

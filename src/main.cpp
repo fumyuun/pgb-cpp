@@ -10,7 +10,7 @@ int main( int argc, char* argv[] )
     }
 
     bool const emulate_boot_rom = boost::filesystem::exists("boot_rom.bin");
-    gameboy_t gb(true, argv[1]);
+    gameboy_t gb(false, argv[1]);
     gb.run();
 
     return 0;

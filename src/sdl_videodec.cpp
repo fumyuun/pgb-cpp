@@ -42,6 +42,7 @@ sdl_videodec_t::~sdl_videodec_t()
 
 void sdl_videodec_t::init(membus_t *membus)
 {
+    this->membus = membus;
     vram = membus->get_pointer(0x8000);
     spt = membus->get_pointer(0xFE00);
     LCDC = membus->get_pointer(0xFF40);
@@ -185,7 +186,33 @@ void sdl_videodec_t::run()
         switch(event.type)
         {
             case SDL_QUIT:      exit(0);        break;
-            case SDL_KEYUP:     debug = true;   break;
+            case SDL_KEYDOWN:
+                switch(event.key.keysym.sym)
+                {
+                    case SDLK_UP:           membus->set_keydown(KEY_UP);     break;
+                    case SDLK_LEFT:         membus->set_keydown(KEY_LEFT);   break;
+                    case SDLK_RIGHT:        membus->set_keydown(KEY_RIGHT);  break;
+                    case SDLK_DOWN:         membus->set_keydown(KEY_DOWN);   break;
+                    case SDLK_z:            membus->set_keydown(KEY_A);      break;
+                    case SDLK_x:            membus->set_keydown(KEY_B);      break;
+                    case SDLK_RETURN:       membus->set_keydown(KEY_START);  break;
+                    case SDLK_BACKSPACE:    membus->set_keydown(KEY_SELECT); break;
+                }
+                break;
+            case SDL_KEYUP:
+                switch(event.key.keysym.sym)
+                {
+                    case SDLK_v: debug = true; break;
+                    case SDLK_UP:           membus->set_keyup(KEY_UP);     break;
+                    case SDLK_LEFT:         membus->set_keyup(KEY_LEFT);   break;
+                    case SDLK_RIGHT:        membus->set_keyup(KEY_RIGHT);  break;
+                    case SDLK_DOWN:         membus->set_keyup(KEY_DOWN);   break;
+                    case SDLK_z:            membus->set_keyup(KEY_A);      break;
+                    case SDLK_x:            membus->set_keyup(KEY_B);      break;
+                    case SDLK_RETURN:       membus->set_keyup(KEY_START);  break;
+                    case SDLK_BACKSPACE:    membus->set_keyup(KEY_SELECT); break;
+                }
+                break;
         }
     }
 

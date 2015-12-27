@@ -11,6 +11,7 @@
 membus_t::membus_t()
     : bootrom_enabled(false), panicked(false)
 {
+    int i;
     memset(rom, 0x00, 0xFFFF);	// Zero memory, not completely correct...
     memset(ram, 0x00, 0xFFFF);
     cart_mode = rom + 0x0147;
@@ -18,7 +19,10 @@ membus_t::membus_t()
     ram_size = rom + 0x0149;
     mem_mode = 0x00;
     rom_bank = 0x00;
-    rom[0xFF44] = 0x90;			// Lets just hack in vsynch
+    for (i = 0; i < 8; ++i)
+    {
+        key_states[i] = false;
+    }
 }
 
 bool membus_t::open_bootrom()
@@ -84,7 +88,7 @@ T denormalize(T const min, T const max, T const value){
 uint8_t membus_t::read(const uint16_t addr)
 {
     if(addr == 0xFF00){
-        std::cout << "P1 (Joypad) read unhandled" << std::endl;
+        std::cout << "P1 (Joypad) read: " << std::hex << (int)rom[0xFF00] << std::endl;
     }
     if(addr == 0xFF01){
         std::cout << "SB (Serial Bus) read unhandled" << std::endl;
@@ -171,6 +175,18 @@ uint8_t membus_t::read(const uint16_t addr)
 
 void membus_t::write(const uint16_t addr, const uint8_t val)
 {
+    if(addr == 0xFF00){
+        if((val & 0x10) == 0x00)
+        {
+            std::cout << "P1 (Joypad) selected direction keys" << std::endl;
+            keypad_select_direction();
+        }
+        if((val & 0x20) == 0x00)
+        {
+            std::cout << "P1 (Joypad) selected button keys" << std::endl;
+            keypad_select_buttons();
+        }
+    }
     if(addr == 0xFF06){
         std::cout << "TMA write unhandled " << std::hex << (int)val << std::endl;
     }
@@ -258,4 +274,55 @@ void membus_t::disable_bootrom()
 {
     std::cout << "Disabling boot ROM.\n";
     bootrom_enabled = false;
+}
+
+void membus_t::set_keydown(jskey_t key)
+{
+    key_states[key] = true;
+    keypad_update();
+}
+
+void membus_t::set_keyup(jskey_t key)
+{
+    key_states[key] = false;
+    keypad_update();
+}
+
+void membus_t::keypad_select_buttons()
+{
+    keypad_selected = false;
+    keypad_update();
+}
+
+void membus_t::keypad_select_direction()
+{
+    keypad_selected = true;
+    keypad_update();
+}
+
+void membus_t::keypad_update()
+{
+    int i;
+    uint8_t mask = rom[0xFF00] | 0x0F;
+    if(keypad_selected)
+    {
+        if(key_states[KEY_UP])    mask &= ~KEYMASK_UP;
+        if(key_states[KEY_LEFT])  mask &= ~KEYMASK_LEFT;
+        if(key_states[KEY_RIGHT]) mask &= ~KEYMASK_RIGHT;
+        if(key_states[KEY_DOWN])  mask &= ~KEYMASK_DOWN;
+    } else {
+        if(key_states[KEY_A])      mask &= ~KEYMASK_A;
+        if(key_states[KEY_B])      mask &= ~KEYMASK_B;
+        if(key_states[KEY_START])  mask &= ~KEYMASK_START;
+        if(key_states[KEY_SELECT]) mask &= ~KEYMASK_SELECT;
+    }
+
+    rom[0xFF00] = mask;
+    std::cout << "Keypad selected: " << keypad_selected << std::endl;
+    std::cout << "Key states: ";
+    for (i = 0; i < 8; ++i)
+    {
+        std::cout << key_states[i] << ", ";
+    }
+    std::cout << std::endl << "Keystate: " << std::hex << (int)rom[0xFF00] << std::endl;
 }

@@ -1,7 +1,8 @@
 #ifndef CPU_H
 #define CPU_H
 
-#define DEBUG_OUTPUT 1
+//#define DEBUG_OUTPUT 2
+//#define BREAKPOINT 0x839
 
 #include <iostream>
 #include <iomanip>

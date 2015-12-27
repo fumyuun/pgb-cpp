@@ -2,16 +2,18 @@
 
 void cpu_t::add(const reg8 src)
 {
-    reg8 result = *get_reg(A) + src;
-    if(result == 0x00)
+    int result = *get_reg(A) + src;
+    if((result & 0xFF) == 0x00)
         *get_reg(F) |= FLAG_Z;
     else
         *get_reg(F) &= ~FLAG_Z;
     *get_reg(F) &= ~FLAG_N;
     if((*get_reg(A) & 0x08) && (src & 0x08))
         *get_reg(F) |= FLAG_H;
-    if((*get_reg(A) & 0x80) && (src & 0x80))
+    if(result > 0xFF)
         *get_reg(F) |= FLAG_C;
+    else
+        *get_reg(F) &= ~FLAG_C;
     *get_reg(A) = result;
 }
 
@@ -71,7 +73,7 @@ void cpu_t::sub(const reg8 src)
     reg8 result = *get_reg(A) - src;
 //  if(*get_reg(F) & FLAG_C)
 //      result -= 0x80;
-    if((result ) == 0x00)
+    if((result & 0xFF) == 0x00)
         *get_reg(F) |= FLAG_Z;
     else
         *get_reg(F) &= ~FLAG_Z;
@@ -104,7 +106,7 @@ void cpu_t::sbc(const reg8 src)
     else
         *get_reg(F) &= ~FLAG_H;
     if(!(*get_reg(A) & 0x80) && ((src & 0x80)
-                                    || (*get_reg(F) & FLAG_C)))
+                             || (*get_reg(F) & FLAG_C)))
         *get_reg(F) |= FLAG_C;
     else
         *get_reg(F) &= ~FLAG_C;
@@ -339,7 +341,6 @@ void cpu_t::ccf()
 
 void cpu_t::scf()
 {
-
     *get_reg(F) |= FLAG_C;
     *get_reg(F) &= ~FLAG_N;
     *get_reg(F) &= ~FLAG_H;
@@ -863,7 +864,6 @@ void cpu_t::jp(const cond_e c, const uint16_t d)
 
 void cpu_t::jp(const uint16_t d)
 {
-//    std::cout << "[" << std::hex << *get_reg(PC) << "]JP " << std::hex << (int)d << std::endl;
     *get_reg(PC) = d;
 }
 
@@ -901,7 +901,6 @@ void cpu_t::push(const reg16_e nn)
 
     membus->write(--(*get_reg(SP)), data.r8.h);
     membus->write(--(*get_reg(SP)), data.r8.l);
-
 }
 
 void cpu_t::pop(const reg16_e nn)

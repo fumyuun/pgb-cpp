@@ -124,7 +124,7 @@ uint8_t membus_t::read(const uint16_t addr)
         std::cout << "Read from WY register, unhandled" << std::endl;
     }
     if(addr == 0xFF4B){
-        std::cout << "Read from XY register, unhandled" << std::endl;
+        std::cout << "Read from WX register, unhandled" << std::endl;
     }
     // Read the LY register, we calculate what would be in there (goes from 0x00 to 0x99 at 57Hz)
     if(addr == 0xFF44){
@@ -154,10 +154,6 @@ uint8_t membus_t::read(const uint16_t addr)
 
         assert(result <= 0x99);
         return result;
-    }
-
-    if(addr == 0xFF07){
-        std::cout << "TAC read unhandled " << std::endl;
     }
 
     if(bootrom_enabled && addr < 0x100)
@@ -218,7 +214,7 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
         std::cout << "Written to WY register, unhandled" << std::endl;
     }
     if(addr == 0xFF4B){
-        std::cout << "Written to XY register, unhandled" << std::endl;
+        std::cout << "Written to WX register, unhandled" << std::endl;
     }
     if(addr == 0xFF0F){
         std::cout << "IF write: " << std::hex << (unsigned int)val << std::endl;

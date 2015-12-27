@@ -151,9 +151,9 @@ class cpu_t
 	void lddhla();
 	void ldiahl();
 	void ldihla();
-	void ldhna_byte(const int8_t n);
-	void ldhan_byte(const int8_t n);
-	void ldhlspn_byte(const int8_t n);
+	void ldhna_byte(const uint8_t n);
+	void ldhan_byte(const uint8_t n);
+	void ldhlspn_byte(const uint8_t n);
 	void ldhna_word(const reg16 n);
 	void ldhan_word(const reg16 n);
 	void ldhnnsp(const reg16 n);

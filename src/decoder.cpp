@@ -444,7 +444,7 @@ void cpu_t::id_execute()
     if(!booted)
         std::cout << "[BOOT]";
 
-    std::cout << "(0x" << std::hex << (int)last_instr.adr << ") ";
+    std::cout << "(0x" << std::hex << (int)last_instr.adr << ") " << (int)last_instr.instr << " ";
 
     cpu_debug_print(last_instr.adr, last_instr.instr, last_instr.data8, last_instr.data16, std::cout);
     std::cout << std::endl;

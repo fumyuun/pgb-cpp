@@ -466,17 +466,17 @@ void cpu_t::ldihla()
     membus->write((*get_reg(HL))++, *get_reg(A));
 }
 
-void cpu_t::ldhna_byte(const int8_t n)
+void cpu_t::ldhna_byte(const uint8_t n)
 {
     ldhna_word(0xFF00 + n);
 }
 
-void cpu_t::ldhan_byte(const int8_t n)
+void cpu_t::ldhan_byte(const uint8_t n)
 {
     ldhan_word(0xFF00 + n);
 }
 
-void cpu_t::ldhlspn_byte(const int8_t n)
+void cpu_t::ldhlspn_byte(const uint8_t n)
 {
     reg8 src = *get_reg(SP);
     *get_reg(HL) = membus->read(*get_reg(SP) + n);

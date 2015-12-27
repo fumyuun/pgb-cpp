@@ -169,7 +169,7 @@ void cpu_t::inc(const reg8_e dest)
         *get_reg(F) &= ~FLAG_Z;
 
     *get_reg(F) &= ~FLAG_N;
-    if(*get_reg(dest) & 0x08)
+    if(result & 0x08)
         *get_reg(F) |= FLAG_H;
     else
         *get_reg(F) &= ~FLAG_H;

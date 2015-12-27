@@ -43,6 +43,7 @@ class membus_t
 		void panic();
 		bool key_states[8];
 		bool keypad_selected;
+		bool keypad_handled;
 
 	public:
 		membus_t();
@@ -60,6 +61,7 @@ class membus_t
 		void keypad_select_buttons();
 		void keypad_select_direction();
 		void keypad_update();
+		bool keypad_interrupt();
 };
 
 #endif

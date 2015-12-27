@@ -114,6 +114,10 @@ void cpu_t::inc_counters()
         //std::cout << "VBLANK" << std::endl;
         *IF |= FLAG_I_VBLANK;
     }
+    if(membus->keypad_interrupt())
+    {
+        *IF |= FLAG_I_JOYPAD;
+    }
 }
 
 reg8 *cpu_t::get_reg(reg8_e reg)

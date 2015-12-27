@@ -23,6 +23,7 @@ membus_t::membus_t()
     {
         key_states[i] = false;
     }
+    keypad_handled = true;
 }
 
 bool membus_t::open_bootrom()
@@ -313,6 +314,11 @@ void membus_t::keypad_update()
         if(key_states[KEY_SELECT]) mask &= ~KEYMASK_SELECT;
     }
 
+    if ((mask & 0x0F) != 0x0F)
+    {
+        keypad_handled = false;
+    }
+
     rom[0xFF00] = mask;
     std::cout << "Keypad selected: " << keypad_selected << std::endl;
     std::cout << "Key states: ";
@@ -321,4 +327,14 @@ void membus_t::keypad_update()
         std::cout << key_states[i] << ", ";
     }
     std::cout << std::endl << "Keystate: " << std::hex << (int)rom[0xFF00] << std::endl;
+}
+
+bool membus_t::keypad_interrupt()
+{
+    if (!keypad_handled)
+    {
+        keypad_handled = true;
+        return true;
+    }
+    return false;
 }

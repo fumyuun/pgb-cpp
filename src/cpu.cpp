@@ -72,7 +72,7 @@ void cpu_t::check_interrupts()
         halted = false;
         if(flags & FLAG_I_VBLANK)
         {
-            std::cout << "VBLANK" << std::endl;
+            //std::cout << "VBLANK" << std::endl;
             *IF &= ~FLAG_I_VBLANK;
             call(0x40);
         }

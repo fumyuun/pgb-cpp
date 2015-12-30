@@ -253,8 +253,6 @@ class cpu_t
 	bool is_panicked() const;
 };
 
-#if DEBUG_OUTPUT > 0
 #include "cpu_debug.h"
-#endif
 
 #endif

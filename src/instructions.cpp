@@ -963,7 +963,6 @@ void cpu_t::ret(const cond_e c)
 
 void cpu_t::reti()
 {
-    std::cout << "RETI" << std::endl;
     ret();
     IME = true;
 }

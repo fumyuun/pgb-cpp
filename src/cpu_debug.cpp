@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <sstream>
 
 reg8_e get_r(const reg8 r);
 reg16_e get_rp(const reg8 r);
@@ -505,4 +506,21 @@ void id_execute_cb(reg8 pc, reg8 instr, std::ostream &out)
 
     std::cout << "Unknown CB instruction 0x" << "0x" << std::hex << (int)pc;
     return;
+}
+
+void cpu_debug_memdump(uint8_t *base, unsigned int addr, unsigned int lines)
+{
+    for(int l = 0; l < lines; ++l)
+    {
+        std::cout << std::hex << (int)(addr + 0x10 * l) << ": ";
+
+        std::stringstream ascii, hex;
+        for(int i = 0x00; i < 0x10; ++i)
+        {
+            uint8_t val = base[addr + 0x10 * l + i];
+            ascii << (isprint(val) ? (char)val : '.');
+            hex << std::hex << std::setw(2) << std::setfill('0') << (int)val << " ";
+        }
+        std::cout << ascii.str() << " | " << hex.str() << std::endl;
+    }
 }

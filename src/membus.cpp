@@ -1,5 +1,6 @@
 #include "membus.h"
 #include "common.h"
+#include "cpu_debug.h"
 
 #include <boost/chrono/system_clocks.hpp>
 
@@ -191,13 +192,13 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
         std::cout << "TAC write unhandled " << std::hex << (int)val << std::endl;
     }
     if(addr == 0xFF24){
-        std::cout << "Sound channel control write unhandled " << std::hex << (int)val << std::endl;
+        //std::cout << "Sound channel control write unhandled " << std::hex << (int)val << std::endl;
     }
     if(addr == 0xFF25){
-        std::cout << "Sound channel selection write unhandled " << std::hex << (int)val << std::endl;
+        //std::cout << "Sound channel selection write unhandled " << std::hex << (int)val << std::endl;
     }
     if(addr == 0xFF26){
-        std::cout << "Sound hardware control write unhandled " << std::hex << (int)val << std::endl;
+        //std::cout << "Sound hardware control write unhandled " << std::hex << (int)val << std::endl;
     }
     if(addr == 0xFF40){
         std::cout << "LCDC write " << std::hex << (unsigned int)val << std::endl;
@@ -209,7 +210,8 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
         std::cout << "Written to LY register, unhandled" << std::endl;
     }
     if(addr == 0xFF46){
-        std::cout << "Written to DMA register, unhandled" << std::endl;
+        //std::cout << "Written to DMA register: " << std::hex << (unsigned int)val << std::endl;
+        perform_dma(val);
     }
     if(addr == 0xFF4A){
         std::cout << "Written to WY register, unhandled" << std::endl;
@@ -337,4 +339,9 @@ bool membus_t::keypad_interrupt()
         return true;
     }
     return false;
+}
+
+void membus_t::perform_dma(uint8_t addr)
+{
+    memcpy(rom + 0xFE00, rom + addr * 0x100, 0x8C);
 }

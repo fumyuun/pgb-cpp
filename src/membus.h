@@ -44,6 +44,7 @@ class membus_t
 		bool key_states[8];
 		bool keypad_selected;
 		bool keypad_handled;
+		void perform_dma(const uint8_t addr);
 
 	public:
 		membus_t();

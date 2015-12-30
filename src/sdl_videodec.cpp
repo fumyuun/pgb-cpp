@@ -170,16 +170,13 @@ void sdl_videodec_t::print()
             uint8_t tile_n = spriteset[i].tile_n[j];
             if(spriteset[i].x_pos != 0 && spriteset[i].y_pos != 0)
             {
-                std::cout << "Not hidden sprite #" << i << ", " << (int)spriteset[i].tile_n[0] << ": ";
-                std::cout << (int)spriteset[i].x_pos << "," << (int)spriteset[i].y_pos;
-                std::cout << std::endl;
-                for(int y = 0; y < 16; ++y)
+                for(int y = 0; y < 8; ++y)
                 {
                     for(int x = 0; x < 8; ++x)
                     {
                         uint8_t data = tileset[tile_n].data[y][x];
-                        putpixel(renderer, spriteset[i].x_pos - 8,
-                                 spriteset[i].y_pos - 16, sp_pal[j][data]);
+                        putpixel(renderer, spriteset[i].x_pos - 8 + x,
+                                 spriteset[i].y_pos - 16 + y, sp_pal[j][data]);
                     }
                 }
             }

@@ -109,7 +109,7 @@ void cpu_t::check_interrupts()
 
 void cpu_t::inc_counters()
 {
-    if(membus->read(0xFF44) == 0x90)
+    if(IME && (*IE & FLAG_I_VBLANK) && membus->read(0xFF44) == 0x90)
     {
         //std::cout << "VBLANK" << std::endl;
         *IF |= FLAG_I_VBLANK;
@@ -245,10 +245,31 @@ void cpu_t::print()
         std::cout << std::dec << ", " << binstring(*get_reg(r)) << "\n";
     }
 
-    std::cout << "[INT] JSTLV " << (IME ? "Enabled" : "Disabled") << "\n"; 
+    std::cout << "[INT] JSTLV " << (IME ? "Enabled" : "Disabled") << "\n";
     std::cout << "IE " << binstring(*IE) << "\n";
     std::cout << "IF " << binstring(*IF) << "\n";
     std::cout << "[Flags]\nZNHC\n" << binstring(*get_reg(F)) << "\n";
+
+    for(int i = -10; i < 10; ++i)
+    {
+        reg16 temp_pc = *get_reg(PC) + i;
+        reg8 temp_opcode = membus->read(temp_pc);
+        reg8 temp_data8 = membus->read(temp_pc + 1);
+        reg16_2x8 temp_data16;
+        temp_data16.r8.l = membus->read(temp_pc + 1);
+        temp_data16.r8.h = membus->read(temp_pc + 2);
+        {
+            if(temp_pc == last_instr.adr)
+                std::cout << ">";
+            else
+                std::cout << " ";
+            std::cout << std::hex << (int)temp_pc << ": " << (int)membus->read(temp_pc) << " ";
+            #if DEBUG_OUTPUT > 0
+            cpu_debug_print(temp_pc, temp_opcode, temp_data8, temp_data16, std::cout);
+            #endif
+            std::cout << std::endl;
+        }
+    }
 }
 
 void cpu_t::inject_code(uint8_t *code, size_t length, reg16 new_pc, int steps)

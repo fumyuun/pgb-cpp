@@ -88,9 +88,9 @@ T denormalize(T const min, T const max, T const value){
 
 uint8_t membus_t::read(const uint16_t addr)
 {
-    if(addr == 0xFF00){
+    /*if(addr == 0xFF00){
         std::cout << "P1 (Joypad) read: " << std::hex << (int)rom[0xFF00] << std::endl;
-    }
+    }*/
     if(addr == 0xFF01){
         std::cout << "SB (Serial Bus) read unhandled" << std::endl;
     }
@@ -175,12 +175,12 @@ void membus_t::write(const uint16_t addr, const uint8_t val)
     if(addr == 0xFF00){
         if((val & 0x10) == 0x00)
         {
-            std::cout << "P1 (Joypad) selected direction keys" << std::endl;
+            //std::cout << "P1 (Joypad) selected direction keys" << std::endl;
             keypad_select_direction();
         }
         if((val & 0x20) == 0x00)
         {
-            std::cout << "P1 (Joypad) selected button keys" << std::endl;
+            //std::cout << "P1 (Joypad) selected button keys" << std::endl;
             keypad_select_buttons();
         }
     }
@@ -320,13 +320,13 @@ void membus_t::keypad_update()
     }
 
     rom[0xFF00] = mask;
-    std::cout << "Keypad selected: " << keypad_selected << std::endl;
+    /*std::cout << "Keypad selected: " << keypad_selected << std::endl;
     std::cout << "Key states: ";
     for (i = 0; i < 8; ++i)
     {
         std::cout << key_states[i] << ", ";
     }
-    std::cout << std::endl << "Keystate: " << std::hex << (int)rom[0xFF00] << std::endl;
+    std::cout << std::endl << "Keystate: " << std::hex << (int)rom[0xFF00] << std::endl;*/
 }
 
 bool membus_t::keypad_interrupt()

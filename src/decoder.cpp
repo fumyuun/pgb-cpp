@@ -5,7 +5,7 @@ void cpu_t::id_execute()
     last_instr.adr = *get_reg(PC);
     reg8 instr = read_mem();
 
-    if(last_instr.adr > 0xFF00)
+    if(last_instr.adr > 0xFFF0)
     {
         std::cout << "I'm likely overflowing!" << std::endl;
         panic();
@@ -444,7 +444,7 @@ void cpu_t::id_execute()
     if(!booted)
         std::cout << "[BOOT]";
 
-    std::cout << "(0x" << std::hex << (int)last_instr.adr << ") " << (int)last_instr.instr << " ";
+    std::cout << "(0x" << std::hex << (int)last_instr.adr << ") 0x" << (int)last_instr.instr << " ";
 
     cpu_debug_print(last_instr.adr, last_instr.instr, last_instr.data8, last_instr.data16, std::cout);
     std::cout << std::endl;

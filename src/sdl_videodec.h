@@ -1,6 +1,8 @@
 #ifndef SDL_VIDEODEC_H
 #define SDL_VIDEODEC_H
 
+#define SHOW_TILEMAP
+
 #include <sys/time.h>
 #include <string>
 #include <iostream>
@@ -30,6 +32,10 @@ class sdl_videodec_t
 		membus_t *membus;
 		SDL_Window *window;
 		SDL_Renderer *renderer;
+	#ifdef SHOW_TILEMAP
+		SDL_Window *tilemap_window;
+		SDL_Renderer *tilemap_renderer;
+	#endif
 		SDL_Event event;
 		uint8_t tiledata[32][32];
 		tile_t tileset[256];
@@ -63,6 +69,12 @@ class sdl_videodec_t
 		void panic();
 		bool is_panicked();
 		bool requesting_debug();
+	#ifdef SHOW_TILEMAP
+		void show_tilemap();
+	#endif
+	#ifdef SHOW_SPRITEMAP
+		void show_spritemap();
+	#endif
 };
 
 #endif

@@ -5,14 +5,15 @@ Gameboy emulator in C++, using libSDL2 and boost. Very big work in progress, cur
 
 Status
 ======
-* Buggy CPU emulation
-* Buggy background display
+* Buggy CPU emulation (several instruction test roms seem to fail)
+* Background display
 
 TODO
 ----
-* Fix stuff
-* Interrupts
+* Render windows
+* Render sprites
+* Joypad
+* DMA
 * Timers
-* Sprites
-* Memory controllers
+* Memory controller (currently only supports the most simple one)
 * Audio

@@ -664,18 +664,29 @@ void cpu_t::rr(const reg8_e dest)
 
 void cpu_t::sla(const reg8_e dest)
 {
-    if(*get_reg(dest) & 0x80)
+    reg8 val;
+    if(dest == _HL_)
+        val = membus->read(*get_reg(HL));
+    else
+        val = *get_reg(dest);
+
+    if(val & 0x80)
         *get_reg(F) |= FLAG_C;
     else
         *get_reg(F) &= ~FLAG_C;
 
-    *get_reg(dest) = *get_reg(dest) << 1;
-    if(*get_reg(dest) == 0x00)
+    val = val << 1;
+    if(val == 0x00)
         *get_reg(F) |= FLAG_Z;
     else
         *get_reg(F) &= ~FLAG_Z;
     *get_reg(F) &= ~FLAG_N;
     *get_reg(F) &= ~FLAG_H;
+
+    if(dest == _HL_)
+        membus->write(*get_reg(HL), dest);
+    else
+        *get_reg(dest) = val;
 }
 
 void cpu_t::sra(const reg8_e dest)

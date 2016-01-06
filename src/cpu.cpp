@@ -122,6 +122,7 @@ void cpu_t::inc_counters()
 
 reg8 *cpu_t::get_reg(reg8_e reg)
 {
+    assert(reg != _HL_);
     switch(reg)
     {
         case A:     return &(registers[AF].r8.h);
